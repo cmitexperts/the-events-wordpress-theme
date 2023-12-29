@@ -305,7 +305,7 @@
         <div class="grid-option  float-end">
           <form>
             <select id="opt_filter" class="selecthotel" name="selecthotel">
-              <option  name="Old-Hotels" value="1">
+            <option  name="Old-Hotels" value="1">
               <?php _e("Old Hotels", "eventone") ?>
               </option>
               <option  name="New-Hotels" value="2">
@@ -324,6 +324,7 @@
         $args = array(
           'post_type' => 'hotel',
           'post_status' => 'publish',
+          // 'orderby' => 'title',
           'order' => 'ASC',
           'posts_per_page' => 3,
         );

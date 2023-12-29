@@ -325,26 +325,24 @@ add_action( 'admin_menu', 'custom_add_menu_page');
 //     wp_enqueue_script( 'ajax-script', get_template_directory_uri() . '/js/my-ajax-script.js', array('jquery') );
 //     wp_localize_script( 'ajax-script', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 // }
-
-add_action( 'wp_enqueue_scripts', 'my_enqueue' );
-
+// add_action( 'wp_enqueue_scripts', 'my_enqueue' );
 function saveAjaxData() {
 	$filterValue =( $_POST );
 	$sameargs = array(
 			'post_type' => 'hotel',
 	  		'post_status' => 'publish',
-	 		'orderby' => 'title',
+	 		// 'orderby' => 'title',
 	);
 	?>
 	<div class="row">
 		<?php
 	if ( $filterValue['filter'] == '1'){
-	    $args =array( 
+	    $args = array(
 			'post_type' => 	$sameargs,
+			'posts_per_page' => 3,
 			'order' => 'ASC',
-			'posts_per_page' => 3,	
+			
 		);
-
 	   }
 	else if ( $filterValue['filter'] == '2'){
 		$args = array(
@@ -353,14 +351,11 @@ function saveAjaxData() {
 			'posts_per_page' => 3,
 		);
 	}
-
 	$query = new WP_Query($args);
 	while($query->have_posts()){
 	  $query->the_post();
 	  $img_path = wp_get_attachment_image_src(get_post_thumbnail_id(),'large');
-
 ?>
-
 	  <div class="col-md-4" id="ajaxTesting">
 	  <div class="hotel">
 		<div class="hotel-img">
@@ -382,38 +377,29 @@ function saveAjaxData() {
 }
 ?>
 </div>
-
 <?php
-if ( $wp_query->max_num_pages > 1 ) :
-	echo '<div id="more_posts">More posts</div>'; // you can use <a> as well
-endif;
 wp_die();
 }
 add_action( 'wp_ajax_nopriv_save_ajax_data', 'saveAjaxData' );
 add_action( 'wp_ajax_save_ajax_data', 'saveAjaxData' );
-// bg-color text-white
 
 //====****====filtering pagination=====****====
 
 function more_post_ajax(){
 	// $currentPage=($_POST);
-	// $filterValue =( $_POST );
-
+	$filterValue =( $_POST );
 	$args =array( 
 		'post_type' => 'hotel',
 		'post_status' => 'publish',
 		'posts_per_page' => 3,
-		'orderby' => 'title',
 		'order' => 'ASC',	
 		'paged' => $_POST['paged']
 	);
-	$response = '';
 	// if ( $filterValue['filter'] == '1'){
 	// 	$args =array( 
 	// 		'post_type' => 'hotel',
 	// 		'post_status' => 'publish',
 	// 		'posts_per_page' => 3,
-	// 		'orderby' => 'title',
 	// 		'order' => 'ASC',	
 	// 		'paged' => $_POST['paged']
 	// 	);
@@ -429,7 +415,7 @@ function more_post_ajax(){
 	// 	);
 	// }
 ?>
-<div class="row">
+<div class="row" id="hotel_posts">
 <?php
 
 	$query = new WP_Query($args);
