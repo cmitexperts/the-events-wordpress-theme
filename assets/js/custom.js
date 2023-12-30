@@ -1,41 +1,39 @@
-
+var currentPage = 1;
 $(document).ready(function () {
   $('select.selecthotel').on('change', function () {
-    var selectorder = $(".selecthotel option:selected").val();
-    if (selectorder == "1") {
-      // alert("New Hotels");
-    } else if (selectorder == "2") {
-      // alert("Old Hotels");
-    }
-    $.ajax({
-      url: ajax_url,
-      type: "POST",
-      data: { 'action': 'save_ajax_data', 'filter': selectorder },
-      success: function (data) {
-        $('#hotelContainer').html(data);
-      }
-    });
+    load_data(false);
   });
 });
+
 //pagination ajax....
 $(document).ready(function (){
-  var currentPage = 1;
   $("#more_posts").on("click", function () {
-    currentPage++;
-    // alert("Hello");
-    $.ajax({
-      url: ajax_url,
-      type: "POST",
-      datatype: "html",
-      data: { 'action': 'more_post_ajax', 'paged': currentPage },
-      success: function (data) {
-        var allposts = $('#hotel_posts').val();
-        if (allposts == '') 
-        {
-          $('#more_posts').hide();
-        }
-        $('#hotelContainer').append(data);
-      }
-    });
+    load_data(true);
   });
 });
+
+function load_data(load_more)
+{
+  var selectorder = $(".selecthotel option:selected").val();
+  if(load_more){
+    currentPage++;
+  }
+  $.ajax({
+    url: ajax_url,
+    type: "POST",
+    datatype: "html",
+    data: { 'action': 'load_ajax', 'paged': currentPage, 'load_more': load_more, 'filter': selectorder},
+    success: function (data) {
+      if(load_more == false){
+        $('#hotelContainer').html(data);   
+    }
+    else if (load_more == true){
+      $('#hotelContainer').append(data);
+    }
+    }
+  }); 
+}
+ // if (currentPage == '4') 
+      // {
+      //   $('#more_posts').hide();
+      // }

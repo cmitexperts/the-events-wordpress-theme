@@ -11,6 +11,7 @@
  *
  * @package TheEvent
  */
+
   get_header();
  ?>
 
@@ -305,11 +306,14 @@
         <div class="grid-option  float-end">
           <form>
             <select id="opt_filter" class="selecthotel" name="selecthotel">
-            <option  name="Old-Hotels" value="1">
-              <?php _e("Old Hotels", "eventone") ?>
+            <option  name="All-Hotels" value="1">
+              <?php _e("All Hotels", "eventone") ?>
               </option>
               <option  name="New-Hotels" value="2">
                 <?php _e("New Hotels", "eventone") ?>
+              </option>
+              <option  name="Old-Hotels" value="3">
+              <?php _e("Old Hotels", "eventone") ?>
               </option>
             </select>
           </form>
@@ -321,18 +325,18 @@
 
         <div class="row" data-aos="fade-up" data-aos-delay="100" id="hotelContainer">
         <?php 
+        
         $args = array(
           'post_type' => 'hotel',
           'post_status' => 'publish',
-          // 'orderby' => 'title',
           'order' => 'ASC',
           'posts_per_page' => 3,
         );
+      
         $query = new WP_Query( $args);
         while($query->have_posts()){
           $query->the_post();
-          $img_path = wp_get_attachment_image_src(get_post_thumbnail_id(),'large');
-        
+          $img_path = wp_get_attachment_image_src(get_post_thumbnail_id(),'large');  
         ?>
           <div class="col-lg-4 col-md-6" id="ajaxTesting">
             <div class="hotel">
@@ -354,7 +358,6 @@
 }
 ?>
 </div>
-
 <div class="text-center">
 <Button class="btn btn-danger" id="more_posts" name="more_posts" type="button" >Load More</Button>
 </div>

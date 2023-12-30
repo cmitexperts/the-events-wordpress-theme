@@ -327,30 +327,40 @@ add_action( 'admin_menu', 'custom_add_menu_page');
 // }
 // add_action( 'wp_enqueue_scripts', 'my_enqueue' );
 function saveAjaxData() {
-	$filterValue =( $_POST );
+	// if()
+	$filterValue = $_POST['filter'] ;
+	$loadbtn = $_POST['load_more'];
 	$sameargs = array(
 			'post_type' => 'hotel',
 	  		'post_status' => 'publish',
-	 		// 'orderby' => 'title',
+			//'paged' => $_POST['paged'],
 	);
 	?>
 	<div class="row">
-		<?php
-	if ( $filterValue['filter'] == '1'){
+   <?php
+	if ( $filterValue == '1'){
+	    $args = array(
+			'post_type' => 	$sameargs,
+			'posts_per_page' => -1,
+			'order' => 'ASC',
+			'paged' => $_POST['paged'],
+		);
+	   }
+	else if ( $filterValue == '2'){
+		$args = array(
+			'post_type' => 	$sameargs,
+			'paged' => $_POST['paged'],
+			'posts_per_page' => 3,
+		);
+	}
+	else if ( $filterValue == '3'){
 	    $args = array(
 			'post_type' => 	$sameargs,
 			'posts_per_page' => 3,
 			'order' => 'ASC',
-			
+			'paged' => $_POST['paged'],
 		);
 	   }
-	else if ( $filterValue['filter'] == '2'){
-		$args = array(
-			'post_type' => 	$sameargs,
-			'order' => 'DESC',
-			'posts_per_page' => 3,
-		);
-	}
 	$query = new WP_Query($args);
 	while($query->have_posts()){
 	  $query->the_post();
@@ -375,83 +385,19 @@ function saveAjaxData() {
 			
 <?php
 }
+exit();
 ?>
 </div>
 <?php
 wp_die();
 }
-add_action( 'wp_ajax_nopriv_save_ajax_data', 'saveAjaxData' );
-add_action( 'wp_ajax_save_ajax_data', 'saveAjaxData' );
+add_action( 'wp_ajax_nopriv_load_ajax', 'saveAjaxData' );
+add_action( 'wp_ajax_load_ajax', 'saveAjaxData' );
+	// $args =array( 
+	// 	'post_type' => 'hotel',
+	// 	'post_status' => 'publish',
+	// 	'posts_per_page' => 3,
+	// 	'order' => 'ASC',	
+	// 	'paged' => $_POST['paged']
+	// );
 
-//====****====filtering pagination=====****====
-
-function more_post_ajax(){
-	// $currentPage=($_POST);
-	$filterValue =( $_POST );
-	$args =array( 
-		'post_type' => 'hotel',
-		'post_status' => 'publish',
-		'posts_per_page' => 3,
-		'order' => 'ASC',	
-		'paged' => $_POST['paged']
-	);
-	// if ( $filterValue['filter'] == '1'){
-	// 	$args =array( 
-	// 		'post_type' => 'hotel',
-	// 		'post_status' => 'publish',
-	// 		'posts_per_page' => 3,
-	// 		'order' => 'ASC',	
-	// 		'paged' => $_POST['paged']
-	// 	);
-	// }
-	// else if ( $filterValue['filter'] == '2'){
-	// 	$args =array( 
-	// 		'post_type' => 'hotel',
-	// 		'post_status' => 'publish',
-	// 		'posts_per_page' => 3,
-	// 		'orderby' => 'title',
-	// 		'order' => 'DESC',	
-	// 		'paged' => $_POST['paged']
-	// 	);
-	// }
-?>
-<div class="row" id="hotel_posts">
-<?php
-
-	$query = new WP_Query($args);
-	while($query->have_posts()){
-	  $query->the_post();
-	  $img_path = wp_get_attachment_image_src(get_post_thumbnail_id(),'large');
-	  ?>
-
-	  <div class="col-md-4" id="">
-	  <div class="hotel">
-		<div class="hotel-img">
-		  <img src="<?php echo $img_path[0]; ?>"  style="height:250px;width:400px;" alt="Hotel 1" class="img-fluid">
-		</div>
-		<h3><a href="#"><?php the_title(); ?></a></h3>
-		<div class="stars">
-		  <i class="bi bi-star-fill"></i>
-		  <i class="bi bi-star-fill"></i>
-		  <i class="bi bi-star-fill"></i>
-		  <i class="bi bi-star-fill"></i>
-		  <i class="bi bi-star-fill"></i>
-		</div>
-		<p><?php the_excerpt(); ?></p>
-	  </div>
-	</div>
-			
-<?php
-}
-?>
-
-</div>
-
-
-<?php
-
-wp_die();
-}
-
-add_action('wp_ajax_nopriv_more_post_ajax', 'more_post_ajax'); 
-add_action('wp_ajax_more_post_ajax', 'more_post_ajax');
