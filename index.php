@@ -325,12 +325,12 @@
 
         <div class="row" data-aos="fade-up" data-aos-delay="100" id="hotelContainer">
         <?php 
-        
+        $postperpage = 3;
         $args = array(
           'post_type' => 'hotel',
           'post_status' => 'publish',
           'order' => 'ASC',
-          'posts_per_page' => 3,
+          'posts_per_page' => $postperpage,
         );
       
         $query = new WP_Query( $args);

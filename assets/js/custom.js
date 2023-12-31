@@ -37,3 +37,7 @@ function load_data(load_more)
       // {
       //   $('#more_posts').hide();
       // }
+      // var postcontainer = $('#p_container').val();
+      // if(postcontainer == ""){
+      //   $("#more_posts").hide();
+      // }

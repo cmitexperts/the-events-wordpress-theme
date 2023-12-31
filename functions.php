@@ -326,41 +326,49 @@ add_action( 'admin_menu', 'custom_add_menu_page');
 //     wp_localize_script( 'ajax-script', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 // }
 // add_action( 'wp_enqueue_scripts', 'my_enqueue' );
+
 function saveAjaxData() {
-	// if()
-	$filterValue = $_POST['filter'] ;
 	$loadbtn = $_POST['load_more'];
+	$filterValue = $_POST['filter'];
+	//  $offset = $_POST["offset"];
 	$sameargs = array(
 			'post_type' => 'hotel',
 	  		'post_status' => 'publish',
-			//'paged' => $_POST['paged'],
 	);
 	?>
-	<div class="row">
+	<div class="row" id="p_container">
    <?php
-	if ( $filterValue == '1'){
-	    $args = array(
-			'post_type' => 	$sameargs,
-			'posts_per_page' => -1,
-			'order' => 'ASC',
-			'paged' => $_POST['paged'],
-		);
-	   }
-	else if ( $filterValue == '2'){
-		$args = array(
-			'post_type' => 	$sameargs,
-			'paged' => $_POST['paged'],
-			'posts_per_page' => 3,
-		);
+   if($loadbtn == true){
+	   $args =array( 
+		'post_type' => 'hotel',
+		'post_status' => 'publish',
+		'posts_per_page' => 3,
+		'order' => 'ASC',	
+		'paged' => $_POST['paged'],
+	);
 	}
-	else if ( $filterValue == '3'){
-	    $args = array(
-			'post_type' => 	$sameargs,
-			'posts_per_page' => 3,
-			'order' => 'ASC',
-			'paged' => $_POST['paged'],
-		);
-	   }
+	else if($loadbtn == false){
+		if ( $filterValue == '1'){
+			$args = array(
+				'post_type' => 	$sameargs,
+				'posts_per_page' => -1,
+				'order' => 'ASC',
+			);
+		   }
+		else if ( $filterValue == '2'){
+			$args = array(
+				'post_type' => 	$sameargs,
+				'posts_per_page' => 6,
+			);
+		}
+		else if ( $filterValue == '3'){
+			$args = array(
+				'post_type' => 	$sameargs,
+				'posts_per_page' => 6,
+				'order' => 'ASC',
+			);
+		   }
+	}
 	$query = new WP_Query($args);
 	while($query->have_posts()){
 	  $query->the_post();
@@ -385,10 +393,11 @@ function saveAjaxData() {
 			
 <?php
 }
-exit();
 ?>
 </div>
+
 <?php
+exit();
 wp_die();
 }
 add_action( 'wp_ajax_nopriv_load_ajax', 'saveAjaxData' );
