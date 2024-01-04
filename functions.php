@@ -328,47 +328,50 @@ add_action( 'admin_menu', 'custom_add_menu_page');
 // add_action( 'wp_enqueue_scripts', 'my_enqueue' );
 
 function saveAjaxData() {
+
 	$loadbtn = $_POST['load_more'];
 	$filterValue = $_POST['filter'];
-	//  $offset = $_POST["offset"];
 	$sameargs = array(
 			'post_type' => 'hotel',
 	  		'post_status' => 'publish',
 	);
+	// print_r($loadbtn);
+	// die;
 	?>
 	<div class="row" id="p_container">
    <?php
-   if($loadbtn == true){
-	   $args =array( 
-		'post_type' => 'hotel',
-		'post_status' => 'publish',
-		'posts_per_page' => 3,
-		'order' => 'ASC',	
-		'paged' => $_POST['paged'],
-	);
+   if($loadbtn == 'false'){
+				if ( $filterValue == '1'){
+					$args = array(
+						'post_type' => 	$sameargs,
+						'posts_per_page' => -1,
+						'order' => 'ASC',
+					);
+				}
+				else if ( $filterValue == '2'){
+					$args = array(
+						'post_type' => 	$sameargs,
+						'posts_per_page' => 6,
+					);
+				}
+				else if ( $filterValue == '3'){
+					$args = array(
+						'post_type' => 	$sameargs,
+						'posts_per_page' => 6,
+						'order' => 'ASC',
+					);
+				}
 	}
-	else if($loadbtn == false){
-		if ( $filterValue == '1'){
-			$args = array(
-				'post_type' => 	$sameargs,
-				'posts_per_page' => -1,
-				'order' => 'ASC',
-			);
-		   }
-		else if ( $filterValue == '2'){
-			$args = array(
-				'post_type' => 	$sameargs,
-				'posts_per_page' => 6,
-			);
-		}
-		else if ( $filterValue == '3'){
-			$args = array(
-				'post_type' => 	$sameargs,
-				'posts_per_page' => 6,
-				'order' => 'ASC',
-			);
-		   }
+	else{
+		   $args =array( 
+			'post_type' => 'hotel',
+			'post_status' => 'publish',
+			'posts_per_page' => 3,
+			'order' => 'ASC',	
+			'paged' => $_POST['paged'],
+		);
 	}
+	
 	$query = new WP_Query($args);
 	while($query->have_posts()){
 	  $query->the_post();
@@ -390,23 +393,21 @@ function saveAjaxData() {
 		<p><?php the_excerpt(); ?></p>
 	  </div>
 	</div>
-			
+	          
 <?php
 }
 ?>
 </div>
-
+<div class="count">
 <?php
-exit();
-wp_die();
+	$max_pages = $query->found_posts;
+	print_r($max_pages);
+	die;
+?>
+</div>
+<?php
+  wp_die();
 }
 add_action( 'wp_ajax_nopriv_load_ajax', 'saveAjaxData' );
 add_action( 'wp_ajax_load_ajax', 'saveAjaxData' );
-	// $args =array( 
-	// 	'post_type' => 'hotel',
-	// 	'post_status' => 'publish',
-	// 	'posts_per_page' => 3,
-	// 	'order' => 'ASC',	
-	// 	'paged' => $_POST['paged']
-	// );
 
