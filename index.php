@@ -78,10 +78,10 @@
                 <p><?php the_field('sub_title'); ?></p>
 
                 <div class="social">
-                  <a href="<?php the_field('twitter_url') ;?>"><i class="bi bi-twitter"></i></a>
-                  <a href="<?php the_field('facebook_url') ;?>"><i class="bi bi-facebook"></i></a>
-                  <a href="<?php the_field('instagram_url') ;?>"><i class="bi bi-instagram"></i></a>
-                  <a href="<?php the_field('linkedin_url') ;?>"><i class="bi bi-linkedin"></i></a>
+                  <a href="<?php the_field('twitter_url') ;?>" target="_blank"><i class="bi bi-twitter"></i></a>
+                  <a href="<?php the_field('facebook_url') ;?>" target="_blank"><i class="bi bi-facebook"></i></a>
+                  <a href="<?php the_field('instagram_url') ;?>" target="_blank"><i class="bi bi-instagram"></i></a>
+                  <a href="<?php the_field('linkedin_url') ;?>" target="_blank"><i class="bi bi-linkedin"></i></a>
                 </div>
 
           </div>
@@ -338,6 +338,7 @@
           $query->the_post();
           $img_path = wp_get_attachment_image_src(get_post_thumbnail_id(),'large');  
         ?>
+        <input type="hidden" id="totalpost" value="<?php echo $query->found_posts; ?>">
           <div class="col-lg-4 col-md-6" id="ajaxTesting">
             <div class="hotel">
               <div class="hotel-img">

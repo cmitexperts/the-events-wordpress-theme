@@ -1,4 +1,4 @@
-var currentPage = 2;
+var currentPage = 1;
 $(document).ready(function () {
   $('select.selecthotel').on('change', function () {
     load_data(false);
@@ -13,37 +13,33 @@ $(document).ready(function (){
 
 function load_data(load_more)
 {
-  var selectorder = $(".selecthotel option:selected").val();
-  if(load_more){
-    // currentPage++;
-  }
+var selectorder = $(".selecthotel option:selected").val();
+
+if(load_more){
+  currentPage++;
+}
+
   $.ajax({
     url: ajax_url,
     type: "POST",
-    datatype: "json",
+    datatype: "html",
     data: { 'action': 'load_ajax', 'paged': currentPage, 'load_more': load_more, 'filter': selectorder},
     success: function (data) {
       if(load_more == false){
         $('#more_posts').hide();
         $('#hotelContainer').html(data);   
     }
-    else if (load_more == true){ 
-      // var postcount = $(".count").val();
-      // console.log(postcount);
-      // if(postcount == 0) {
-      //   $('#more_posts').hide();
-      // }
+
+   else if (load_more == true){ 
+    var totalpost = parseInt($("#totalpost").val(), 10);
+    var  postperpage = 3;
+    var loadpost = Math.ceil(totalpost / postperpage);
+
       $('#hotelContainer').append(data);
-      currentPage++
+      if(currentPage >= loadpost){
+        $("#more_posts").hide();
+      }
     }
     }
   }); 
 }
- // if (currentPage == '4') 
-      // {
-      //   $('#more_posts').hide();
-      // }
-      // var postcontainer = $('#p_container').val();
-      // if(postcontainer == ""){
-      //   $("#more_posts").hide();
-      // }
