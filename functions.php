@@ -337,25 +337,20 @@ function saveAjaxData() {
 				if ( $filterValue == '1'){
 					$args = array(
 						'post_type' => 	$sameargs,
-						'posts_per_page' => -1,
+						'posts_per_page' => 3,
 						'order' => 'ASC',
 					);
 				}
 				else if ( $filterValue == '2'){
 					$args = array(
 						'post_type' => 	$sameargs,
-						'posts_per_page' => 6,
-					);
-				}
-				else if ( $filterValue == '3'){
-					$args = array(
-						'post_type' => 	$sameargs,
-						'posts_per_page' => 6,
-						'order' => 'ASC',
+						'posts_per_page' => 3,
 					);
 				}
 	}
-	else{
+	
+	if($loadbtn == 'true' && $filterValue == '1'){
+		
 		   $args =array( 
 			'post_type' => 'hotel',
 			'post_status' => 'publish',
@@ -364,13 +359,20 @@ function saveAjaxData() {
 			'paged' => $_POST['paged'],
 		);
 	}
-	
+	else if($loadbtn == 'true' && $filterValue == '2'){
+		$args = array(
+			'post_type' => 	$sameargs,
+			'posts_per_page' => 3,
+			'paged' => $_POST['paged'],
+		);
+	}
 	$query = new WP_Query($args);
 	while($query->have_posts()){
 	  $query->the_post();
 	  $img_path = wp_get_attachment_image_src(get_post_thumbnail_id(),'large');
 ?>
-	  <div class="col-md-4" id="ajaxTesting">
+
+	 <div class="col-md-4" id="ajaxTesting">
 	  <div class="hotel">
 		<div class="hotel-img">
 		  <img src="<?php echo $img_path[0]; ?>"  style="height:250px;width:400px;" alt="Hotel 1" class="img-fluid">
@@ -386,17 +388,9 @@ function saveAjaxData() {
 		<p><?php the_excerpt(); ?></p>
 	  </div>
 	</div>
+	
 <?php
 }
-?>
-
-<?php if($loadbtn == 'false'){ ?>
-<div class="text-center">
-<Button class="btn btn-danger" id="more" name="more" type="button" >More</Button>
-</div>       
-<?php } ?>
-
-<?php
   wp_die();
 }
 add_action( 'wp_ajax_nopriv_load_ajax', 'saveAjaxData' );

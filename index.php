@@ -306,14 +306,11 @@
         <div class="grid-option  float-end">
           <form>
             <select id="opt_filter" class="selecthotel" name="selecthotel">
-            <option  name="All-Hotels" value="1">
-              <?php _e("All Hotels", "eventone") ?>
+            <option  name="Old-Hotels" value="1">
+              <?php _e("Old Hotels", "eventone") ?>
               </option>
               <option  name="New-Hotels" value="2">
                 <?php _e("New Hotels", "eventone") ?>
-              </option>
-              <option  name="Old-Hotels" value="3">
-              <?php _e("Old Hotels", "eventone") ?>
               </option>
             </select>
           </form>
